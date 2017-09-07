@@ -3,28 +3,24 @@ package com.github.ydydwang.aio.channel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 
-public class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, ChannelInboundHandler> {
+import com.github.ydydwang.aio.util.TriggerUtils;
+
+public class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, MainChannelContext> {
 	public static final AcceptHandler INSTANCE = new AcceptHandler();
 
-	public void completed(AsynchronousSocketChannel channel, ChannelInboundHandler handler) {
-		ChannelContext.getServerSocketChannel().accept(ChannelContext.getHandler(), AcceptHandler.INSTANCE);
-		ChannelContext channelContext = new ChannelContext(channel);
+	public void completed(AsynchronousSocketChannel channel, MainChannelContext context) {
+		context.getChannel().accept(context, AcceptHandler.INSTANCE);
+		ChannelContext channelContext = new ChannelContext(channel, context);
+		TriggerUtils.channelActive(channelContext.getHandlerList(), channelContext);
 		try {
-			ChannelContext.getHandler().channelActive(channelContext);
 			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, ReadHandler.INSTANCE);
 		} catch (Exception e) {
-			try {
-				handler.exceptionCaught(channelContext, e.getCause());
-			} catch (Exception e1) {
-			}
+			TriggerUtils.exceptionCaught(channelContext.getHandlerList(), channelContext, e.getCause());
 		}
 	}
 
-	public void failed(Throwable cause, ChannelInboundHandler handler) {
-		try {
-			handler.channelUnregistered(cause);
-		} catch (Exception e) {
-		}
+	public void failed(Throwable cause, MainChannelContext context) {
+		TriggerUtils.channelUnregistered(context.getHandlerList(), cause);
 	}
 
 }

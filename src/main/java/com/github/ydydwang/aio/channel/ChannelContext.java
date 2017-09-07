@@ -5,33 +5,29 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 
 import com.github.ydydwang.aio.buffer.Buf;
+import com.github.ydydwang.aio.list.ListNode;
 import com.github.ydydwang.aio.util.AllocatorUtils;
 
 public class ChannelContext  {
 	private static final int DEFAULT_CAPACITY = 1024;
-	static ChannelInboundHandler handler;
-	static AsynchronousServerSocketChannel serverSocketChannel;
 
+	private final MainChannelContext mainChannelContext;
 	private final AsynchronousSocketChannel channel;
 	private int capacity = DEFAULT_CAPACITY;
 	private Buf buffer;
 
-	public ChannelContext(AsynchronousSocketChannel channel) {
+	public ChannelContext(AsynchronousSocketChannel channel
+			, MainChannelContext mainChannelContext) {
 		this.channel = channel;
+		this.mainChannelContext = mainChannelContext;
 	}
 
-	public static void init(ChannelInboundHandler handler
-			, AsynchronousServerSocketChannel serverSocketChannel) {
-		ChannelContext.handler = handler;
-		ChannelContext.serverSocketChannel = serverSocketChannel;
+	public ListNode<ChannelInboundHandler> getHandlerList() {
+		return mainChannelContext.getHandlerList();
 	}
 
-	public static ChannelInboundHandler getHandler() {
-		return handler;
-	}
-
-	public static AsynchronousServerSocketChannel getServerSocketChannel() {
-		return serverSocketChannel;
+	public AsynchronousServerSocketChannel getServerSocketChannel() {
+		return mainChannelContext.getChannel();
 	}
 
 	public AsynchronousSocketChannel getChannel() {

@@ -6,7 +6,7 @@ import com.github.ydydwang.aio.buffer.BufAllocator;
 import com.github.ydydwang.aio.buffer.DirectBufAllocator;
 import com.github.ydydwang.aio.buffer.OffHeapBufAllocator;
 
-public abstract class AllocatorUtils {
+public class AllocatorUtils {
 	private static BufAllocator INSTANCE;
 
 	static {
