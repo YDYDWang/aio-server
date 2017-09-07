@@ -1,5 +1,7 @@
 package com.github.ydydwang.aio.channel;
 
+import java.io.IOException;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -13,12 +15,17 @@ public class ChannelContext  {
 
 	private final MainChannelContext mainChannelContext;
 	private final AsynchronousSocketChannel channel;
+	private SocketAddress remoteAddress;
 	private int capacity = DEFAULT_CAPACITY;
 	private Buf buffer;
 
 	public ChannelContext(AsynchronousSocketChannel channel
 			, MainChannelContext mainChannelContext) {
 		this.channel = channel;
+		try {
+			this.remoteAddress = channel.getRemoteAddress();
+		} catch (IOException e) {
+		}
 		this.mainChannelContext = mainChannelContext;
 	}
 
@@ -32,6 +39,10 @@ public class ChannelContext  {
 
 	public AsynchronousSocketChannel getChannel() {
 		return channel;
+	}
+
+	public SocketAddress getRemoteAddress() {
+		return remoteAddress;
 	}
 
 	public ByteBuffer getBuffer() {

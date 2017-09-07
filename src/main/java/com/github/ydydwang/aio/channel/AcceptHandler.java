@@ -15,7 +15,7 @@ public class AcceptHandler implements CompletionHandler<AsynchronousSocketChanne
 		try {
 			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, ReadHandler.INSTANCE);
 		} catch (Exception e) {
-			TriggerUtils.exceptionCaught(channelContext.getHandlerList(), channelContext, e.getCause());
+			ReadHandler.INSTANCE.failed(e.getCause(), channelContext);
 		}
 	}
 
