@@ -9,14 +9,13 @@ import com.github.ydydwang.aio.util.ByteBufferUtils;
 import com.github.ydydwang.aio.util.TriggerUtils;
 
 public class ReadHandler implements CompletionHandler<Integer, ChannelContext> {
-	public static final ReadHandler INSTANCE = new ReadHandler();
 
 	public void completed(Integer bytes, ChannelContext channelContext) {
 		TriggerUtils.channelRead(channelContext.getHandlerList(), channelContext, channelContext.getBuffer());
 		try {
-			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, ReadHandler.INSTANCE);
+			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, channelContext.getReadHandler());
 		} catch (Exception e) {
-			ReadHandler.INSTANCE.failed(e.getCause(), channelContext);
+			channelContext.getReadHandler().failed(e.getCause(), channelContext);
 		}
 	}
 

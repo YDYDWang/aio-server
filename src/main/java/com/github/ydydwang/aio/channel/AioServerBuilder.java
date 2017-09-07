@@ -45,8 +45,10 @@ public class AioServerBuilder {
 				AsynchronousServerSocketChannel.open(group)
 						.bind(getAddress());
 		MainChannelContext mainChannelContext = new MainChannelContext(toListNode(handlerList)
-				, serverSocketChannel); 
-		serverSocketChannel.accept(mainChannelContext, AcceptHandler.INSTANCE);
+				, serverSocketChannel
+				, new AcceptHandler()
+				, new ReadHandler()); 
+		serverSocketChannel.accept(mainChannelContext, mainChannelContext.getAcceptHandler());
 	}
 
 	private InetSocketAddress getAddress() {

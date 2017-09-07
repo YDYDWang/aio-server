@@ -5,6 +5,7 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 
 import com.github.ydydwang.aio.buffer.Buf;
 import com.github.ydydwang.aio.list.ListNode;
@@ -35,6 +36,14 @@ public class ChannelContext  {
 
 	public AsynchronousServerSocketChannel getServerSocketChannel() {
 		return mainChannelContext.getChannel();
+	}
+
+	public CompletionHandler<AsynchronousSocketChannel, MainChannelContext> getAcceptHandler() {
+		return mainChannelContext.getAcceptHandler();
+	}
+
+	public CompletionHandler<Integer, ChannelContext> getReadHandler() {
+		return mainChannelContext.getReadHandler();
 	}
 
 	public AsynchronousSocketChannel getChannel() {
