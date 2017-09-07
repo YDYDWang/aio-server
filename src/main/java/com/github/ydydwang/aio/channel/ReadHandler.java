@@ -1,5 +1,6 @@
 package com.github.ydydwang.aio.channel;
 
+import java.io.IOException;
 import java.nio.channels.CompletionHandler;
 
 public class ReadHandler implements CompletionHandler<Integer, ChannelContext> {
@@ -9,7 +10,6 @@ public class ReadHandler implements CompletionHandler<Integer, ChannelContext> {
 		try {
 			ChannelContext.getHandler().channelRead(channelContext, channelContext.getBuffer());
 			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, ReadHandler.INSTANCE);
-//			Excutors.getWorker().execute(new Reader(channelContext));
 		} catch (Exception e) {
 		}
 	}
@@ -17,6 +17,13 @@ public class ReadHandler implements CompletionHandler<Integer, ChannelContext> {
 	public void failed(Throwable cause, ChannelContext channelContext) {
 		try {
 			ChannelContext.getHandler().exceptionCaught(channelContext, cause);
+			if (cause instanceof IOException) {
+				try {
+					ChannelContext.getHandler().channelInactive(channelContext);
+					channelContext.getChannel().close();
+				} catch (Exception e) {
+				}
+			}
 		} catch (Exception e) {
 		}
 	}
