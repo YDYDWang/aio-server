@@ -13,11 +13,15 @@ import com.github.ydydwang.aio.util.AllocatorUtils;
 
 public class ChannelContext  {
 	private static final int DEFAULT_CAPACITY = 1024;
+	private static final int INT_SIXTEEN = 16;
+	private static final int INT_TWO = 2;
+	private static final int INT_ZERO = 0;
 
 	private final MainChannelContext mainChannelContext;
 	private final AsynchronousSocketChannel channel;
 	private SocketAddress remoteAddress;
 	private int capacity = DEFAULT_CAPACITY;
+	private int count;
 	private Buf buffer;
 
 	public ChannelContext(AsynchronousSocketChannel channel
@@ -59,7 +63,15 @@ public class ChannelContext  {
 	}
 
 	public ByteBuffer newBuffer() {
+		checkIncrement();
 		this.buffer = AllocatorUtils.allocate(capacity);
 		return getBuffer();
+	}
+
+	private void checkIncrement() {
+		if (++count > INT_SIXTEEN) {
+			capacity = capacity << INT_TWO;
+			count = INT_ZERO;
+		}
 	}
 }
