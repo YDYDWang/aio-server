@@ -11,10 +11,14 @@ public class AcceptHandler implements CompletionHandler<AsynchronousSocketChanne
 		context.getChannel().accept(context, context.getAcceptHandler());
 		ChannelContext channelContext = new ChannelContext(channel, context);
 		TriggerUtils.channelActive(channelContext.getHandlerList(), channelContext);
-		try {
-			channelContext.getChannel().read(channelContext.newBuffer(), channelContext, channelContext.getReadHandler());
-		} catch (Exception e) {
-			channelContext.getReadHandler().failed(e.getCause(), channelContext);
+		if (channelContext.getChannel().isOpen()) {
+			try {
+				channelContext.getChannel().read(channelContext.newBuffer(), channelContext, channelContext.getReadHandler());
+			} catch (Exception e) {
+				channelContext.getReadHandler().failed(e.getCause(), channelContext);
+			}
+		} else {
+			TriggerUtils.channelInactive(channelContext.getHandlerList(), channelContext);
 		}
 	}
 

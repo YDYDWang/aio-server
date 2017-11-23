@@ -8,14 +8,12 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 
 import com.github.ydydwang.aio.buffer.Buf;
-import com.github.ydydwang.aio.list.ListNode;
+import com.github.ydydwang.aio.collection.ListNode;
+import com.github.ydydwang.aio.common.Numbers;
 import com.github.ydydwang.aio.util.AllocatorUtils;
 
-public class ChannelContext  {
+public class ChannelContext {
 	private static final int DEFAULT_CAPACITY = 1024;
-	private static final int INT_SIXTEEN = 16;
-	private static final int INT_TWO = 2;
-	private static final int INT_ZERO = 0;
 
 	private final MainChannelContext mainChannelContext;
 	private final AsynchronousSocketChannel channel;
@@ -69,9 +67,9 @@ public class ChannelContext  {
 	}
 
 	private void checkIncrement() {
-		if (++count > INT_SIXTEEN) {
-			capacity = capacity << INT_TWO;
-			count = INT_ZERO;
+		if (++count > Numbers.INT_SIXTEEN) {
+			capacity = capacity << Numbers.INT_TWO;
+			count = Numbers.INT_ZERO;
 		}
 	}
 }

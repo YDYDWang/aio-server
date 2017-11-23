@@ -1,4 +1,4 @@
-package com.github.ydydwang.aio.list;
+package com.github.ydydwang.aio.collection;
 
 public class ListNode<T> {
 	private final T val;

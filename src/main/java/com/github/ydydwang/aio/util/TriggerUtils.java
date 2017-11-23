@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import com.github.ydydwang.aio.channel.ChannelContext;
 import com.github.ydydwang.aio.channel.ChannelInboundHandler;
-import com.github.ydydwang.aio.list.ListNode;
+import com.github.ydydwang.aio.collection.ListNode;
 
 public class TriggerUtils {
 
