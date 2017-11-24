@@ -1,16 +1,14 @@
 package com.github.ydydwang.aio.channel;
 
-import java.nio.ByteBuffer;
-
-public interface ChannelInboundHandler {
+public interface ChannelInboundHandler<I, O> {
 
 	void channelActive(ChannelContext channelContext) throws Exception;
 
 	void channelInactive(ChannelContext channelContext) throws Exception;
 
-	void channelRead(ChannelContext channelContext, ByteBuffer buffer) throws Exception;
+	O channelRead(ChannelContext channelContext, I msg) throws Exception;
 
-	void exceptionCaught(ChannelContext channelContext, Throwable cause) throws Exception;
+	void readFailed(ChannelContext channelContext, Throwable cause) throws Exception;
 
-	void channelUnregistered(Throwable cause) throws Exception;
+	void acceptFailed(Throwable cause) throws Exception;
 }

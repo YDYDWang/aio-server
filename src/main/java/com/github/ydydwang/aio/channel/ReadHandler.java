@@ -11,6 +11,7 @@ import com.github.ydydwang.aio.util.TriggerUtils;
 
 public final class ReadHandler implements CompletionHandler<Integer, ChannelContext> {
 
+	@Override
 	public void completed(Integer count, ChannelContext channelContext) {
 		if (count != Numbers.INT_MINUS_ONE) {
 			TriggerUtils.channelRead(channelContext.getHandlerList(), channelContext, channelContext.getBuffer());
@@ -28,10 +29,11 @@ public final class ReadHandler implements CompletionHandler<Integer, ChannelCont
 		}
 	}
 
+	@Override
 	public void failed(Throwable cause, ChannelContext channelContext) {
 		if (cause instanceof IOException || cause instanceof ClosedChannelException
 				|| cause instanceof AsynchronousCloseException) {
-			TriggerUtils.exceptionCaught(channelContext.getHandlerList(), channelContext, cause);
+			TriggerUtils.readFailed(channelContext.getHandlerList(), channelContext, cause);
 			try {
 				channelContext.getChannel().close();
 			} catch (Exception e) {

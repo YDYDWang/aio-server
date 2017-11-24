@@ -16,6 +16,7 @@ public class AioServerBuilder {
 	private AsynchronousChannelGroup group;
 	private String host;
 	private Integer port;
+	@SuppressWarnings("rawtypes")
 	private final List<ChannelInboundHandler> handlerList = new LinkedList<ChannelInboundHandler>();
 
 	public AioServerBuilder threadCount(int count) throws IOException {
@@ -34,6 +35,7 @@ public class AioServerBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public AioServerBuilder addHandler(ChannelInboundHandler handler) {
 		this.handlerList.add(handler);
 		return this;
@@ -64,6 +66,7 @@ public class AioServerBuilder {
 		assert !this.handlerList.isEmpty();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ListNode<ChannelInboundHandler> toListNode(List<ChannelInboundHandler> handlerList) {
 		if (handlerList.isEmpty()) {
 			return null;

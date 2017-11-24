@@ -32,6 +32,7 @@ public class ChannelContext {
 		this.mainChannelContext = mainChannelContext;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ListNode<ChannelInboundHandler> getHandlerList() {
 		return mainChannelContext.getHandlerList();
 	}

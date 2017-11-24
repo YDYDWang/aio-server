@@ -1,13 +1,12 @@
 package com.github.ydydwang.aio.util;
 
-import java.nio.ByteBuffer;
-
 import com.github.ydydwang.aio.channel.ChannelContext;
 import com.github.ydydwang.aio.channel.ChannelInboundHandler;
 import com.github.ydydwang.aio.collection.ListNode;
 
 public class TriggerUtils {
 
+	@SuppressWarnings("rawtypes")
 	public static void channelActive(ListNode<ChannelInboundHandler> listNode
 			, ChannelContext channelContext) {
 		while (listNode != null) {
@@ -20,6 +19,7 @@ public class TriggerUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static void channelInactive(ListNode<ChannelInboundHandler> listNode
 			, ChannelContext channelContext) {
 		while (listNode != null) {
@@ -32,36 +32,41 @@ public class TriggerUtils {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void channelRead(ListNode<ChannelInboundHandler> listNode
-			, ChannelContext channelContext, ByteBuffer buffer) {
+			, ChannelContext channelContext, Object msg) {
 		while (listNode != null) {
 			try {
-				listNode.getVal()
-						.channelRead(channelContext, buffer);
+				msg = listNode.getVal()
+						.channelRead(channelContext, msg);
 			} catch (Exception e) {
+				TriggerUtils.readFailed(channelContext.getHandlerList(), channelContext, e.getCause());
+				break;
 			}
 			listNode = listNode.getNext();
 		}
 	}
 
-	public static void exceptionCaught(ListNode<ChannelInboundHandler> listNode
+	@SuppressWarnings("rawtypes")
+	public static void readFailed(ListNode<ChannelInboundHandler> listNode
 			, ChannelContext channelContext, Throwable cause) {
 		while (listNode != null) {
 			try {
 				listNode.getVal()
-						.exceptionCaught(channelContext, cause);
+						.readFailed(channelContext, cause);
 			} catch (Exception e) {
 			}
 			listNode = listNode.getNext();
 		}
 	}
 
-	public static void channelUnregistered(ListNode<ChannelInboundHandler> listNode
+	@SuppressWarnings("rawtypes")
+	public static void acceptFailed(ListNode<ChannelInboundHandler> listNode
 			, Throwable cause) {
 		while (listNode != null) {
 			try {
 				listNode.getVal()
-						.channelUnregistered(cause);
+						.acceptFailed(cause);
 			} catch (Exception e) {
 			}
 			listNode = listNode.getNext();

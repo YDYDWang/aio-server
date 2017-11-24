@@ -7,11 +7,13 @@ import java.nio.channels.CompletionHandler;
 import com.github.ydydwang.aio.collection.ListNode;
 
 public class MainChannelContext  {
+	@SuppressWarnings("rawtypes")
 	private final ListNode<ChannelInboundHandler> handlerList;
 	private final AsynchronousServerSocketChannel channel;
 	private final CompletionHandler<AsynchronousSocketChannel, MainChannelContext> acceptHandler;
 	private final CompletionHandler<Integer, ChannelContext> readHandler;
 
+	@SuppressWarnings("rawtypes")
 	public MainChannelContext(ListNode<ChannelInboundHandler> handlerList
 			, AsynchronousServerSocketChannel channel
 			, CompletionHandler<AsynchronousSocketChannel, MainChannelContext> acceptHandler
@@ -22,6 +24,7 @@ public class MainChannelContext  {
 		this.readHandler = readHandler;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ListNode<ChannelInboundHandler> getHandlerList() {
 		return handlerList;
 	}

@@ -7,6 +7,7 @@ import com.github.ydydwang.aio.util.TriggerUtils;
 
 public class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, MainChannelContext> {
 
+	@Override
 	public void completed(AsynchronousSocketChannel channel, MainChannelContext context) {
 		context.getChannel().accept(context, context.getAcceptHandler());
 		ChannelContext channelContext = new ChannelContext(channel, context);
@@ -22,8 +23,9 @@ public class AcceptHandler implements CompletionHandler<AsynchronousSocketChanne
 		}
 	}
 
+	@Override
 	public void failed(Throwable cause, MainChannelContext context) {
-		TriggerUtils.channelUnregistered(context.getHandlerList(), cause);
+		TriggerUtils.acceptFailed(context.getHandlerList(), cause);
 	}
 
 }
