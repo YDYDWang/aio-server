@@ -13,12 +13,12 @@ import com.github.ydydwang.aio.common.Numbers;
 import com.github.ydydwang.aio.util.AllocatorUtils;
 
 public class ChannelContext {
-	private static final int DEFAULT_CAPACITY = 1024;
+	protected static final int DEFAULT_CAPACITY = 1024;
 
 	private final MainChannelContext mainChannelContext;
 	private final AsynchronousSocketChannel channel;
 	private SocketAddress remoteAddress;
-	private int capacity = DEFAULT_CAPACITY;
+	protected int capacity = DEFAULT_CAPACITY;
 	private int count;
 	private Buf buffer;
 
@@ -67,7 +67,7 @@ public class ChannelContext {
 		return getBuffer();
 	}
 
-	private void checkIncrement() {
+	protected void checkIncrement() {
 		if (++count > Numbers.INT_SIXTEEN) {
 			capacity = capacity << Numbers.INT_TWO;
 			count = Numbers.INT_ZERO;
