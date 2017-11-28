@@ -19,7 +19,7 @@ public final class ReadHandler implements CompletionHandler<Integer, ChannelCont
 				try {
 					channelContext.getChannel().read(channelContext.newBuffer(), channelContext, channelContext.getReadHandler());
 				} catch (Exception e) {
-					channelContext.getReadHandler().failed(e.getCause(), channelContext);
+					channelContext.getReadHandler().failed(e, channelContext);
 				}
 			} else {
 				TriggerUtils.channelInactive(channelContext.getHandlerList(), channelContext);

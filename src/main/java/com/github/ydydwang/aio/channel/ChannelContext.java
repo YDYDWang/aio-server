@@ -15,12 +15,12 @@ import com.github.ydydwang.aio.util.AllocatorUtils;
 public class ChannelContext {
 	protected static final int DEFAULT_CAPACITY = 1024;
 
-	private final MainChannelContext mainChannelContext;
-	private final AsynchronousSocketChannel channel;
-	private SocketAddress remoteAddress;
+	protected final MainChannelContext mainChannelContext;
+	protected final AsynchronousSocketChannel channel;
+	protected SocketAddress remoteAddress;
 	protected int capacity = DEFAULT_CAPACITY;
-	private int count;
-	private Buf buffer;
+	protected int count;
+	protected Buf buffer;
 
 	public ChannelContext(AsynchronousSocketChannel channel
 			, MainChannelContext mainChannelContext) {
