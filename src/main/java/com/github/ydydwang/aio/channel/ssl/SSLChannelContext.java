@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 
 import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLEngineResult.HandshakeStatus;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
@@ -48,6 +49,10 @@ public class SSLChannelContext extends ChannelContext {
 
 	public void setHandshakeStatus(HandshakeStatus handshakeStatus) {
 		this.handshakeStatus = handshakeStatus;
+	}
+
+	public void setHandshakeStatus(SSLEngineResult result) {
+		this.handshakeStatus = result.getHandshakeStatus();
 	}
 
 	public ByteBuffer getInNetBuffer() {

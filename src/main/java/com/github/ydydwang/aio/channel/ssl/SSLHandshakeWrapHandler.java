@@ -8,11 +8,11 @@ public class SSLHandshakeWrapHandler extends SSLHandshakeHandler {
 	private static final SSLHandshakeWrapWriteHandler writeHandler = new SSLHandshakeWrapWriteHandler();
 
 	@Override
-	protected void doCompleted(Integer count, SSLChannelContext channelContext) {
+	protected void doCompleted(SSLChannelContext channelContext) {
 		try {
 			SSLEngineResult result = channelContext.getEngine().wrap(Buffers.EMPTY_BUFFER, channelContext.getOutNetBuffer());
 			System.out.println("SSLWrapHandler:" + result);
-			channelContext.setHandshakeStatus(channelContext.getEngine().getHandshakeStatus());
+			channelContext.setHandshakeStatus(result);
 			channelContext.getOutNetBuffer().flip();
 			channelContext.getChannel().write(channelContext.getOutNetBuffer(), channelContext, writeHandler);
 		} catch (Exception e) {

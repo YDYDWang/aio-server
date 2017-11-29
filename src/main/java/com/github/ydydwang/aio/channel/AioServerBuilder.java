@@ -10,12 +10,17 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Executors;
 
+import javax.net.ssl.SSLContext;
+
+import com.github.ydydwang.aio.channel.ssl.SSLAcceptHandler;
+import com.github.ydydwang.aio.channel.ssl.SSLHandshakeHandler;
 import com.github.ydydwang.aio.collection.ListNode;
 
 public class AioServerBuilder {
 	private AsynchronousChannelGroup group;
 	private String host;
 	private Integer port;
+	private SSLContext context;
 	@SuppressWarnings("rawtypes")
 	private final List<ChannelInboundHandler> handlerList = new LinkedList<ChannelInboundHandler>();
 
@@ -35,6 +40,11 @@ public class AioServerBuilder {
 		return this;
 	}
 
+	public AioServerBuilder withSSLContext(SSLContext context) {
+		this.context = context;
+		return this;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public AioServerBuilder addHandler(ChannelInboundHandler handler) {
 		this.handlerList.add(handler);
@@ -46,11 +56,19 @@ public class AioServerBuilder {
 		AsynchronousServerSocketChannel serverSocketChannel = 
 				AsynchronousServerSocketChannel.open(group)
 						.bind(getAddress());
-		MainChannelContext mainChannelContext = new MainChannelContext(toListNode(handlerList)
-				, serverSocketChannel
-				, new AcceptHandler()
-				, new ReadHandler()); 
-		serverSocketChannel.accept(mainChannelContext, mainChannelContext.getAcceptHandler());
+		if (context == null) {
+			MainChannelContext mainChannelContext = new MainChannelContext(toListNode(handlerList)
+					, serverSocketChannel
+					, new AcceptHandler()
+					, new ReadHandler()); 
+			serverSocketChannel.accept(mainChannelContext, mainChannelContext.getAcceptHandler());
+		} else {
+			MainChannelContext mainChannelContext = new MainChannelContext(toListNode(handlerList)
+					, serverSocketChannel
+					, new SSLAcceptHandler(context)
+					, new SSLHandshakeHandler());
+			serverSocketChannel.accept(mainChannelContext, mainChannelContext.getAcceptHandler());
+		}
 	}
 
 	private InetSocketAddress getAddress() {
