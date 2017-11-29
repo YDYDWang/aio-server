@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.ClosedChannelException;
 
-import javax.net.ssl.SSLEngineResult;
-
 import com.github.ydydwang.aio.channel.ChannelContext;
 import com.github.ydydwang.aio.util.ByteBufferUtils;
 import com.github.ydydwang.aio.util.TriggerUtils;
@@ -17,9 +15,7 @@ public class SSLReadHandler extends SSLHandshakeHandler {
 	protected void doCompleted(SSLChannelContext channelContext) {
 		try {
 			channelContext.getInNetBuffer().flip();
-			SSLEngineResult result = channelContext.getEngine().unwrap(channelContext.getInNetBuffer(), channelContext.newBuffer());
-			System.out.println("SSLReadHandler:" + result);
-			System.out.println(ByteBufferUtils.toString(channelContext.getBuffer()));
+			channelContext.getEngine().unwrap(channelContext.getInNetBuffer(), channelContext.newBuffer());
 			channelContext.getInNetBuffer().clear();
 			TriggerUtils.channelRead(channelContext.getHandlerList(), channelContext, channelContext.getBuffer());
 			if (channelContext.getChannel().isOpen()) {

@@ -53,8 +53,6 @@ public class SSLHandshakeHandler implements CompletionHandler<Integer, ChannelCo
 				channelContext.getChannel().read(channelContext.getInNetBuffer(), channelContext, unwrapHandler);
 				break;
 			case NEED_WRAP:
-				System.out.println(ByteBufferUtils.toString(channelContext.getBuffer()));
-				channelContext.getBuffer().clear();
 				SSLHandshakeHandler.wrapHandler.doCompleted(channelContext);
 				break;
 			case FINISHED:

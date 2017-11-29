@@ -11,7 +11,6 @@ public class SSLHandshakeWrapHandler extends SSLHandshakeHandler {
 	protected void doCompleted(SSLChannelContext channelContext) {
 		try {
 			SSLEngineResult result = channelContext.getEngine().wrap(Buffers.EMPTY_BUFFER, channelContext.getOutNetBuffer());
-			System.out.println("SSLWrapHandler:" + result);
 			channelContext.setHandshakeStatus(result);
 			channelContext.getOutNetBuffer().flip();
 			channelContext.getChannel().write(channelContext.getOutNetBuffer(), channelContext, writeHandler);

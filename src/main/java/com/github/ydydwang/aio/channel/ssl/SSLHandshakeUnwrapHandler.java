@@ -9,7 +9,6 @@ public class SSLHandshakeUnwrapHandler extends SSLHandshakeHandler {
 		try {
 			channelContext.getInNetBuffer().flip();
 			SSLEngineResult result = channelContext.getEngine().unwrap(channelContext.getInNetBuffer(), channelContext.getBuffer());
-			System.out.println("SSLUnwrapHandler:" + result);
 			channelContext.getInNetBuffer().compact();
 			channelContext.setHandshakeStatus(result);
 			doNext(channelContext);
